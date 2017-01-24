@@ -51,6 +51,20 @@
             padding-top: 0.5em;
         }
 
+        .double-col {
+            column-count: 3;
+        }
+
+        .double-col ul{
+          font-family: 'Fira Mono';
+            list-style-type: none;
+        }
+        .code{
+          font-family: 'Fira Mono';
+          background-color: #eee;
+        }
+
+
         .footnote {
           position: absolute;
           bottom: 10em;
@@ -103,16 +117,537 @@ layout: false
 .right-column[
 This work shop is intended to be a crash course in the Python programming language and how to use Pandas.
 
-We will cover stuff
-]
+The goal of this workshop is that by the end of it you will comfortable enough to be able to fetch, manipulate, plot and output data.
 
+Slides are available at: .link['https://nathanscully.github.io/herebepandas']
+
+]
 
 .footnote[pandas is an open source, BSD-licensed library providing high-performance, easy-to-use data structures and data analysis tools for the Python programming language.
 
-.link[http://pandas.pydata.org/]
+.link[http://pandas.pydata.org/]]
+---
+layout: false
+.left-column[
+  ## What is Python?
+]
+.right-column[
+
+![python](https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Python_logo_and_wordmark.svg/260px-Python_logo_and_wordmark.svg.png)
+
+Python is a interpreted language developed in the 90s and one of the mostly widely used programming languages in the world.
+
+Designed for readbility with succinct expressions, it has an easy learning curve but alot of advanced powerful features. It is dynamically typed and supports multiple programming paradigms,  including object-oriented, imperative, functional programming, and procedural styles.
+
+It is becoming the defacto standard for data processing and analysis but can be used for anything including backend web servers (Django).
+
+There are currently 2 versions in the wild, 2 (.link[https://pythonclock.org/]) & 3.
+
+]
+---
+layout: false
+.left-column[
+  ## The Python Manifesto
+]
+.right-column[
+
+- Beautiful is better than ugly.
+- Explicit is better than implicit.
+- Simple is better than complex.
+- Complex is better than complicated.
+- Flat is better than nested.
+- Sparse is better than dense.
+- Readability counts.
+
+]
+.footnote[PEP 20 -- The Zen of Python]
+---
+layout: false
+.left-column[
+  ## The look
+]
+.right-column[
+
+Python is a whitespace indented language 😱 that is designed to be a highly readable.
+
+  ```
+  from app import World
+
+  hello = World('hello')
+  py = World('py')
+
+  worlds = [hello, py]
+
+  def count_worlds(worlds)
+    return len(worlds)
+
+  print("There are %s worlds" % count_worlds(worlds))
+  >> There are 2 worlds
+
+  hello.is_inhabitable
+  >> True
+
+  py.say_name()
+  >> My name is `py`
+  ```
+]
+---
+layout: false
+.left-column[
+  ## Reserved words
+]
+.right-column[
+It has a fairly short reserved word list:
+.double-col[
+* and
+* as
+* assert
+* async
+* await
+* break
+* class
+* continue
+* def
+* del
+* elif
+* else
+* except
+* exec
+* False
+* finally
+* for
+* from
+* global
+* if
+* import
+* in
+* is
+* lambda
+* None
+* nonlocal
+* not
+* or
+* pass
+* print
+* raise
+* return
+* True
+* try
+* while
+* with
+* yield
+]]
+---
+layout: false
+.left-column[
+  ## FizzBuzz
+]
+.right-column[
+
+Classic FizzBuzz example.
+
+Note the indentations and use of .code[:] to delimit blocks.
+  ```
+  for num in range(1,101):
+    if num % 5 == 0 and num % 3 == 0:
+        print("FizzBuzz")
+    elif num % 3 == 0:
+        print("Fizz")
+    elif num % 5 == 0:
+        print("Buzz")
+    else:
+        print(num)
+  ```
+  ```
+  >> 1
+  >> 2
+  >> Fizz
+  >> 4
+  >> Buzz
+  >> Fizz
+  >> 7
+  >> 8
+  >> Fizz
+  >> Buzz
+  >> 11
+  ```
+]
+---
+layout: false
+.left-column[
+  ## Syntax
+]
+.right-column[
+
+We will cover the following:
+- comments
+- variables
+- strings
+- numbers
+- collections
+- dicts
+- tuples
+- classes
+- functions
+- lambda
+- assertion
+- logic
+- iteration
 ]
 
 ---
+layout: false
+.left-column[
+  ## comments
+]
+.right-column[
+
+Python supports two different comment syntax, each has its own purpose.
+
+Inline comments:
+```
+x = x + 1                 # Increment x
+```
+
+Docstrings:
+```
+def increment_by_1(x):
+   """
+   Increments x by 1
+   """
+   return x+1
+```
+]
+---
+layout: false
+.left-column[
+  ## Variables
+]
+.right-column[
+
+Python values, not variables, carry type. All variables in Python hold references to objects, and these references are passed to functions
+
+Straight foward. PEP-8 suggests to use .code[lower_case_with_underscores] for variable names and .code[UPPER_CASE] for constants.
+
+```
+COMPANY = "Oneflare"
+company_address = "120 Sussex St, Sydney"
+```
+]
+---
+layout: false
+.left-column[
+  ## Strings
+]
+.right-column[
+
+Either single or double quotes can be used to quote strings, they function the same.
+
+You can use multiline strings by surrounding the block with .code["""].
+You can also concatnate lines using .code[\], which is often helpful for readability.
+```
+COMPANY = 'Oneflare'
+
+company_address = """
+  Oneflare
+  Level 7
+  120 Sussex St, Sydney 2000
+  Australia
+  """
+
+tagline = "The one connection you need" \
+        'to get the job done'
+>> The one connection you need to get the job done
+```
+]
+---
+layout: false
+.left-column[
+  ## Collections
+]
+.right-column[
+
+The .code[list] class is a mutable sequence of objects. They are 0 indexed and you can splice them using the .code[[x:y]] syntax
+```
+staff = ['james', 'michelle', 'nathan']
+staff.append('cookie')
+>> ['james', 'michelle', 'nathan', 'cookie']
+
+staff[1]
+>> 'michelle'
+
+staff[:2]
+>> ['james', 'michelle']
+
+staff[2:]
+>> ['nathan', 'cookie']
+```
+
+The .code[set] class is a mutable sequence of objects that does not allow for duplicates. Note the .code[{...}]
+```
+staff = {'james', 'michelle', 'nathan', 'nathan', 'james'}
+>> {'james', 'michelle', 'nathan'}
+```
+]
+---
+layout: false
+.left-column[
+  ## Dicts
+]
+.right-column[
+
+The .code[dict] class is a mutable mapping of key and values. Any type of value (function, object, Class etc can be mapped against a key) and they can be mixed.
+
+Construnction is done via .code[{'key': value , ...}]
+```
+teams = {'james':'engineering',
+         'michelle':'insights',
+         'nathan':'insights',
+         'cookie': ['insights', 'engineering', 1]}
+```
+Lookups can be done via .code[dict['key']]:
+```
+teams['james']
+>>> 'engineering'
+```
+
+We can assign via .code[dict['key']=value]:
+```
+teams['cookie'] = 'c-suite'
+```
+]
+---
+layout: false
+.left-column[
+  ## tuples
+]
+.right-column[
+
+The .code[tuple] class is an immutable sequence.
+
+Construnction is normally done via  .code[(val1, val2, val3)] but the parentheses can be dropped (not recommended)
+```
+company_address = ('Level 7', '120 Sussex St', 'Sydney', 2000)
+company_address = 'Level 7', '120 Sussex St', 'Sydney', 2000
+
+```
+You can access and expand the elements of a tuple using a list of named variables or via indexes.
+```
+level, street, suburb, postcode = company_address
+>> level = 'Level 7'
+>> street = '120 Sussex St'
+
+postcode = company_address[3]
+>> postcode = 2000
+```
+
+We can also use a namedtuple as a .code[Class] alternative.
+```
+from collections import namedtuple
+Address = namedtuple('Address', 'level street suburb postcode')
+adr = Address('Level 7', '120 Sussex St', 'Sydney', 2000)
+adr.street
+>> '120 Sussex St'
+```
+]
+---
+layout: false
+.left-column[
+  ## classes
+]
+.right-column[
+
+As Python supports Object Orientated programming we can construct classes:
+```
+class MyClass:
+    i = 12345
+    def f(self):
+        return 'hello Oneflare'
+
+c = MyClass()
+c.i
+>> 12345
+c.f()
+>> 'hello Oneflare'
+```
+To initate an object with parameters we need to overload the .code[__init__] function:
+```
+class MyClass:
+    def __init__(self, i=12345):
+      self.i = i
+
+c = MyClass()
+c.i
+>> 12345
+c = MyClass(9876)
+c.i
+>> 9876
+```
+]
+---
+layout: false
+.left-column[
+  ## functions
+]
+.right-column[
+
+In Python, functions are first-class objects that can be created and passed around dynamically.
+
+```
+def exponent(x, y):
+    return x**y
+exponent(2,3)
+>> 8
+```
+Or:
+```
+def create_dag_sql_from_file_func(path):
+    """
+    Dynamically create a function based on a SQL file for
+    Airflow to execute.
+    """
+    def func(ds, **kwargs):
+        ph = PostgresHook(postgres_conn_id="OF_REDSHIFT")
+        fd = open(path, 'r')
+        sqlFile = fd.read()
+        fd.close()
+        ph.run(sqlFile)
+    return func
+```
+]
+---
+layout: false
+.left-column[
+  ## lambdas
+]
+.right-column[
+
+Python supports anonymous functions through the .code[lambda] keyword.
+```
+def exponent(x, y):
+    return x**y
+exponent(2,3)
+>> 8
+
+exponent = lambda x, y: x**y
+exponent(2,3)
+>> 8
+```
+
+These are *very* useful with Pandas.
+
+]
+---
+layout: false
+.left-column[
+  ## operators
+]
+.right-column[
+
+Python uses fairly standard operators: including: .code[+], .code[-], .code[*], .code[/], .code[%]
+```
+1 * 2
+6 / 3
+1 + 5
+```
+
+You can also increment/decrease using shorthand:
+
+```
+x = 1
+x += 1
+>> x = 2
+x = 1
+x -= 1
+>> x = 1
+```
+]
+---
+layout: false
+.left-column[
+  ## assertion
+]
+.right-column[
+
+Python can use operator based assertion using the following symbols: .code[==], .code[>=], .code[>], .code[<], .code[<=] and .code[!=]
+```
+1 != 2
+2 == 2
+3 < 4
+4 > 1
+```
+It also supports keyword assertion using .code[and], .code[or], .code[not] and .code[in]
+```
+1 < 2 and 3 < 4
+1 <2 or 2 > 1
+1 in [1, 2, 3]
+5 not in [1, 2, 3]
+```
+]
+---
+layout: false
+.left-column[
+  ## logic
+]
+.right-column[
+
+Python uses .code[if], .code[elif] and .code[else] to support logic blocks.
+```
+if 1 in [1,2,3]:
+  print("1 is in array")
+elif 1 == 3:
+  print("this won't work")
+else:
+  print("catch all")
+```
+
+You can use if statements to evaluate objections
+```
+x = None
+if x:
+  print("hello")
+>>
+
+if 1 < 3 and 2 < 3:
+  return 5
+```
+]
+---
+layout: false
+.left-column[
+  ## logic
+]
+.right-column[
+
+Python has a number of ways of iterating:
+```
+for i in range(1,11):
+  print(i)
+
+for key, value in d.items():  # {'a':1, 'b':2}
+  print(key, value)
+>> a 1
+>> b 2
+
+count = 0
+while (count < 9):
+   print(count)
+   count += 1
+```
+
+It also supports generators 😀
+```
+evens = [i for i in range(1,11) if i % 2 == 0]
+>> [2, 4, 6, 8, 10]
+
+squared = { n: n**2 for n in range(5)}
+>> {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
+>> squared[3] = 9
+```
+
+]
+---
+
 
 # Introduction
 
