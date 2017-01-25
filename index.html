@@ -1306,6 +1306,28 @@ pd.merge(people, scores, how='left', left_on='name', right_on='name')
 ---
 layout: false
 .left-column[
+  ## Iterating Rows
+]
+.right-column[
+
+There may be times you wish to iterate over a Dataframe row by row. This is often useful to update mutiple columns at one time or if you wish to construct new objects for a row.
+
+We do this using the .code[iterrows()] function on a DataFrame.
+
+```
+short_people =[]
+for index, row in people.iterrows():
+  gender_short = 'm' if row['gender'] == 'Male' else 'f'
+  initials = ''.join([w[0] for w in row['name'].split(' ')])
+  short_people.append((initials, gender_short))
+short_people
+>> [('KT', 'm'), ('NS', 'm'), ('MH', 'f'), ('KK', 'm')]
+```
+
+]
+---
+layout: false
+.left-column[
   ## Chaining Functions
 ]
 .right-column[
