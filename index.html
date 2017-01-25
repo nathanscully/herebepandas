@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>My Awesome Presentation</title>
+    <title>Here be Pandas</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <style type="text/css">
         @import url('https://fonts.googleapis.com/css?family=Fira+Mono|Montserrat|Open+Sans');
@@ -164,6 +164,29 @@ layout: false
 ---
 layout: false
 .left-column[
+  ## Getting python
+]
+.right-column[
+Version 2.7 comes by default on OSX. Don't use it.
+
+You can install Python in 2 ways on OSX:
+```
+brew install python3
+```
+
+If you want to get straight into 'data science', you can use a opinoinated installer called .code[Anaconda] that will include ~ 100 basic libraries. [https://www.continuum.io/downloads
+](https://www.continuum.io/downloads)
+
+Running Python can be done via cmd line:
+
+```
+$ pything myapp.py
+```
+Or using notebooks, I recommend Jupyter: [http://jupyter.org/](http://jupyter.org/)
+]
+---
+layout: false
+.left-column[
   ## The look
 ]
 .right-column[
@@ -290,6 +313,7 @@ We will cover the following:
 - classes
 - functions
 - lambda
+- operators
 - assertion
 - logic
 - iteration
@@ -307,9 +331,13 @@ Python supports two different comment syntax, each has its own purpose.
 Inline comments:
 ```
 x = x + 1                 # Increment x
+
+# multiline
+# block
+# comment
 ```
 
-Docstrings:
+Docstrings, used in a function to to describe its purpose
 ```
 def increment_by_1(x):
    """
@@ -321,7 +349,7 @@ def increment_by_1(x):
 ---
 layout: false
 .left-column[
-  ## Variables
+  ## variables
 ]
 .right-column[
 
@@ -337,7 +365,7 @@ company_address = "120 Sussex St, Sydney"
 ---
 layout: false
 .left-column[
-  ## Strings
+  ## strings
 ]
 .right-column[
 
@@ -363,7 +391,30 @@ tagline = "The one connection you need" \
 ---
 layout: false
 .left-column[
-  ## Collections
+  ## numbers
+]
+.right-column[
+
+Similar to other programming languages, the main number classes are .code[int] and .code[float].
+
+```
+one = 1  # int
+one_point_0 = 1.0 # float
+
+int(1.2351)
+>> 1 # int
+
+round(1.234516123241, 2)
+>> 1.23 # float
+
+int("2")
+>> 2 # int
+```
+]
+---
+layout: false
+.left-column[
+  ## collections
 ]
 .right-column[
 
@@ -392,7 +443,7 @@ staff = {'james', 'michelle', 'nathan', 'nathan', 'james'}
 ---
 layout: false
 .left-column[
-  ## Dicts
+  ## dicts
 ]
 .right-column[
 
@@ -615,7 +666,7 @@ if 1 < 3 and 2 < 3:
 ---
 layout: false
 .left-column[
-  ## logic
+  ## iteration
 ]
 .right-column[
 
@@ -647,16 +698,853 @@ squared = { n: n**2 for n in range(5)}
 
 ]
 ---
+class: center, middle, of
+
+## Pandas
+
+Or, how I learnt to love the data.
+---
+layout: false
+.left-column[
+  ## Pandas
+]
+.right-column[
+*Pandas* is a library that provides Python with DataFrames and all the goodness that goes with them.
+
+It describes itself as:
+
+> The most powerful and flexible open source data analysis / manipulation tool available in any language.
+
+It is the default onestop shop for reading and manipulating table based data and includes hooks for CSV, SQL I/O.
+
+It also integrates nicely with Numpy, the standard numerical computation library for Python.
+
+[http://pandas.pydata.org/](http://pandas.pydata.org/)
+]
+---
+layout: false
+.left-column[
+  ## Dataframes
+]
+.right-column[
+A Datafram is basically a table. Think of it as a mini database with columns and rows that you can query and perform functions on.
+
+In a programming enviornment, think of it as an Excel sheet without the ability to click into the cells. You can write formulas in columns, you can pivot, you can group by.
+
+You just need to know the write syntax!
+]
+---
+layout: false
+.left-column[
+  ## Using Pandas
+]
+.right-column[
+You need to import the library first:
+
+```
+import pandas as pd
+```
+
+You can now reference pandas in the applications namespace via 'pd'. e.g.:
+
+```
+import pandas as pd
+
+df = pd.DataFrame(...)
+```
+]
+---
+layout: false
+.left-column[
+  ## Making a DataFrame
+]
+.right-column[
+
+Creating a DataFrame can be done in a number of ways. You can provide the .code[pd.DataFrame(...)] constructor with a .code[list] of .code[lists], .code[tuples] or .code[dicts]
+
+```
+df = pd.DataFrame([[1,2,3],
+                   [4,5,6],
+                   [7,8,9]])
+df
+>>    0  1  2
+>> 0  1  2  3
+>> 1  4  5  6
+>> 2  7  8  9
 
 
-# Introduction
+df = pd.DataFrame([(1,2,3),
+                   (4,5,6),
+                   (7,8,9)])
+df
+>>    0  1  2
+>> 0  1  2  3
+>> 1  4  5  6
+>> 2  7  8  9
+```
+]
+---
+layout: false
+.left-column[
+  ## DataFrame with columns
+]
+.right-column[
 
-Hello
+By default, if you don't pass columns you will get numeric column values. You can use flat .code[dicts], which Pandas will use the keys of as column names, or you can manually specifiy columns.
 
-  ```
-  def myfunc(a, b)
-    return a**b
-  ```
+```
+# columns arg
+df = pd.DataFrame([[1,2,3],
+                   [4,5,6],
+                   [7,8,9]],
+                   columns=['A','B','C']))
+df
+>>    A  B  C
+>> 0  1  2  3
+>> 1  4  5  6
+>> 2  7  8  9
+
+# dicts
+df = pd.DataFrame([{'A':1,'B':2,'C':3},
+                   {'A':4,'B':5,'C':6},
+                   {'A':7,'B':8,'C':9}])
+df
+>>    A  B  C
+>> 0  1  2  3
+>> 1  4  5  6
+>> 2  7  8  9
+```
+]
+---
+layout: false
+.left-column[
+  ## Series
+]
+.right-column[
+
+A series is a single, typed column or row in a DataFrame. Pandas makes a best guess on types when you load data in. Datetimes are handled fairly well if using a standard format, but the type can always be changed later.
+
+You can access a series via index lookups on the DataFrame, and then convert all values to a list (in the order of the index) or individually via index lookups.
+
+```
+df
+>>    A  B  C
+>> 0  1  2  3
+>> 1  4  5  6
+>> 2  7  8  9
+
+df['A']
+>> 0    1
+>> 1    4
+>> 2    7
+>> Name: A, dtype: int64
+
+df['A'].values
+>> [1 4 7]  # list
+
+df['A'][0]
+>> 1
+```
+]
+---
+layout: false
+.left-column[
+  ## Operations on Series
+]
+.right-column[
+
+We can perform numeric calculations and .code[apply] lambda functuons on .code[series].
+
+```
+df
+>>    A  B  C
+>> 0  1  2  3
+>> 1  4  5  6
+>> 2  7  8  9
+
+df['A'].sum()
+>> 12
+
+df['A'].count()
+>> 3
+
+df['A'].median()
+>> 4.0
+
+df['A'].apply(lambda ...)  # will be explained further
+```
+]
+---
+layout: false
+.left-column[
+  ## Selecting data
+]
+.right-column[
+
+One of the most important things in analysing data is selecting the right data. DataFrames makes this easy with a consistent and easy syntax.
+
+Pandas tends towards immutability, so most operations return new Series or DataFrames and are not applied to the original frame (unless specified/overwritten)
+
+```
+df
+>>    A  B  C
+>> 0  1  2  3
+>> 1  4  5  6
+>> 2  7  8  9
+
+# Single column to get a series
+df['A']
+>> 0    1
+>> 1    4
+>> 2    7
+
+# Multiple columns. This returns a NEW DataFrame
+df[['A', 'C']]  #note double [[]]
+>>    A  C
+>> 0  1  3
+>> 1  4  6
+>> 2  7  9
+```
+]
+---
+layout: false
+.left-column[
+  ## Filtering data
+]
+.right-column[
+
+One of the other most important parts of analysis is filtering data. There are 2 ways of doing this in Pandas, I recommend the first as I find it more flexible and consistent with the 'selection' syntax.
+
+```
+df
+>>    A  B  C
+>> 0  1  2  3
+>> 1  4  5  6
+>> 2  7  8  9
+
+df[(df['A'] > 3)] # prefer this
+>>    A  B  C
+>> 1  4  5  6
+>> 2  7  8  9
+
+df.query('A > 3')
+>>    A  B  C
+>> 1  4  5  6
+>> 2  7  8  9
+
+```
+]
+---
+layout: false
+.left-column[
+  ## Filtering data
+]
+.right-column[
+
+Multiple filters can be applied by chaining boolean operations.
+
+```
+df
+>>    A  B  C
+>> 0  1  2  3
+>> 1  4  5  6
+>> 2  7  8  9
+
+df.query('A > 3 and C < 7')
+>>    A  B  C
+>> 1  4  5  6
+
+df[(df['A'] > 3) &
+   (df['C'] < 7)]
+>>    A  B  C
+>> 1  4  5  6
+
+```
+]
+---
+layout: false
+.left-column[
+  ## Selecting a row
+]
+.right-column[
+
+If you want access a single row in Pandas, there are couple of ways to do it. When you 'filter' data, the result is a DataFrame, not a 'row' (.code[series]) so you need to .code['squeeze'] the row to get it into a .code[series] (this only works if you have one row returned). If you use indexes, you can use the .code[loc] function.
+
+```
+df.loc[df['A']==1]
+>>    A  B  C  row_multiple
+>> 0  1  2  3            -1
+
+type(df.loc[df['A']==1])
+>> pandas.core.frame.DataFrame
+
+df.loc[df['A']==1].squeeze()
+>> A               1
+>> B               2
+>> C               3
+>> row_multiple   -1
+>> Name: 0, dtype: int64
+
+df.loc[0] # uses the index column (defaults to row number)
+>> A               1
+>> B               2
+>> C               3
+>> row_multiple   -1
+>> Name: 0, dtype: int64
+```
+]
+---
+layout: false
+.left-column[
+  ## Adding columns
+]
+.right-column[
+
+We can add new columns by using the .code[.loc] function on a DataFrame. Data inserted can be aggregations of other columns of static values, or functions (next slide). This is done inplace.
+
+```
+df
+>>    A  B  C
+>> 0  1  2  3
+>> 1  4  5  6
+>> 2  7  8  9
+
+df.loc[:, 'Totals'] = df['A'] + df['B'] + df['C']  # Prefered
+>>    A  B  C  Totals
+>> 0  1  2  3       6
+>> 1  4  5  6      15
+>> 2  7  8  9      24
+
+df['Totals'] = df['A'] + df['B'] + df['C']  # avoid if you can
+>>    A  B  C  Totals
+>> 0  1  2  3       6
+>> 1  4  5  6      15
+>> 2  7  8  9      24
+
+# See http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+```
+]
+---
+layout: false
+.left-column[
+  ## Adding columns with filters
+]
+.right-column[
+
+We can use the filtering mechanism of .loc to only add values to certain rows.
+
+```
+df
+>>    A  B  C
+>> 0  1  2  3
+>> 1  4  5  6
+>> 2  7  8  9
+
+df.loc[2:, "something"] = "hello"
+>>    A  B  C something
+>> 0  1  2  3       NaN
+>> 1  4  5  6       NaN
+>> 2  7  8  9     hello
+
+df.loc[df['B']<6, "B less than 6"] = True
+>>    A  B  C less than 6
+>> 0  1  2  3        True
+>> 1  4  5  6        True
+>> 2  7  8  9         NaN
+```
+]
+---
+layout: false
+.left-column[
+  ##  The magic of apply
+]
+.right-column[
+
+We can use lambda functions on series and rows to manipulate data in extended ways.
+
+[](https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Greek_lc_lamda_thin.svg/100px-Greek_lc_lamda_thin.svg.png)
+
+> A lambda function is a function definition that is not bound to an identifier.
+
+```
+df
+>>    A  B  C
+>> 0  1  2  3
+>> 1  4  5  6
+>> 2  7  8  9
+
+df.loc[:, 'A Squared'] = df['A'].apply(lambda a: a * a)
+>>    A  B  C  A Squared
+>> 0  1  2  3          1
+>> 1  4  5  6         16
+>> 2  7  8  9         49
+```
+
+![boom](http://i.giphy.com/10fdsa6b79iBDq.gif)
+]
+---
+layout: false
+.left-column[
+  ##  Apply with defined functions
+]
+.right-column[
+
+We can also pass values through defined functions when a lambda is to brief.
+
+```
+df
+>>    A  B  C
+>> 0  1  2  3
+>> 1  4  5  6
+>> 2  7  8  9
+
+def random_multiply(i):
+  x = random.randrange(10)
+  y = i + x
+  print("x: %s, y: %s" % (x, y))
+  z = 'Result is %s' % y
+  return z
+
+df.loc[:, 'random_multiply'] = df['A'].apply(lambda i: random_multiply(i))
+>> x: 4, y: 5
+>> x: 7, y: 11
+>> x: 2, y: 9
+>>    A  B  C random_multiply
+>> 0  1  2  3     Result is 5
+>> 1  4  5  6    Result is 11
+>> 2  7  8  9     Result is 9
+```
+]
+---
+layout: false
+.left-column[
+  ##  Apply at the row level
+]
+.right-column[
+
+Whilst you can use .code[apply] at a series level, you can also use it a .code[row] level using .code[axis=1].
+This passes a .code[pandas.core.series.Series] object into the function where the 'index' values are the row column names.
+```
+df
+>>    A  B  C
+>> 0  1  2  3
+>> 1  4  5  6
+>> 2  7  8  9
+
+def row_multiple(row):
+  return row['A'] * row['B'] - row['C']
+
+df.loc[:, 'row_multiple'] = df.apply(lambda r: row_multiple(r), axis=1)
+>>    A  B  C  row_multiple
+>> 0  1  2  3            -1
+>> 1  4  5  6            14
+>> 2  7  8  9            47
+```
+]
+---
+layout: false
+.left-column[
+  ## Index
+]
+.right-column[
+
+The Pandas index is a special 'hidden' column that can be used for selection and ordering. By default this is row number when data is loaded and is always attached to the row in a fairly immutable way. E.g. If you sort the DataFrame, the index will remain the same.
+We can set the index on DataFrame using .code[index]. This makes the index column inaccesible by normal selection method but can be useful for joins and aggregations/groupbys.
+
+```
+df.sort_values(by='B', ascending=False)
+>>    A  B  C
+>> 2  7  8  9
+>> 1  4  5  6
+>> 0  1  2  3
+
+df.set_index('B')
+>>    A  C
+>> B
+>> 2  1  3
+>> 5  4  6
+>> 8  7  9
+# now you can't df['B'] >> KeyError: 'B'
+# but you can df.loc[5]
+>> A    4
+>> C    6
+>> Name: 5, dtype: int64
+```
+]
+---
+layout: false
+.left-column[
+  ## Pivots
+]
+.right-column[
+
+Fear not excel lovers, You can easily .code[pivot] a DataFrame
+
+```
+>>        Name  Age  Gender  Score
+>> 0       Ken   35    Male    5.7
+>> 1    Nathan   27    Male    8.2
+>> 2  Michelle   16  Female    9.8
+>> 3      Koen   28    Male    NaN
+
+pd.pivot_table(people, index='Gender', aggfunc='sum')
+>>          Age  Score
+>> Gender
+>> Female   16    9.8
+>> Male     90   13.9
+
+pd.pivot_table(people, index='Gender',
+              values='score', aggfunc=('max','sum','min'))
+>>         max   sum  min
+>> Gender
+>> Female  9.8   9.8  9.8
+>> Male    8.2  13.9  5.7
+```
+]
+---
+layout: false
+.left-column[
+  ## Groupby
+]
+.right-column[
+
+DataFrames can be grouped by Series names, both a single and a .code[list] of values is supported.
+Note that the .code[.groupby()] returns a .code[pandas.core.groupby.DataFrameGroupBy] object, you need to make sure you give it an aggregation.
+```
+>>        Name  Age  Gender  Score
+>> 0       Ken   35    Male    5.7
+>> 1    Nathan   27    Male    8.2
+>> 2  Michelle   16  Female    9.8
+>> 3      Koen   28    Male    NaN
+
+people.groupby('Gender').sum()
+>>          Age  Score
+>> Gender
+>> Female   16    9.8
+>> Male     90   13.9
+
+people.groupby(['Gender','Age']).sum()
+>>          Age  Score
+>> Gender
+>> Female   16    9.8
+>> Male     90   13.9
+
+people.groupby('Gender').aggregate({'Age':'median','Score':'mean'})
+>>         Age  Score
+>> Gender
+>> Female   16   9.80
+>> Male     28   6.95
+```
+]
+---
+layout: false
+.left-column[
+  ## Renaming columns
+]
+.right-column[
+
+Often aggregates leave us with undesirable names. We can chain methods in Pandas to rename columns:
+```
+people.groupby('Gender').aggregate({'Age':'median','Score':'mean'})
+                        .rename(columns={'Age':'Median Age', 'Score':'Mean Score'})
+>>         Median Age  Mean Score
+>> gender
+>> Female          16        9.80
+>> Male            28        6.95
+```
+
+Just remember that you need to assign the returned DataFrame for the operation to take affect. E.g.
+
+```
+df.rename(columns={'A':'thing'}) # nothing is persisted
+df
+>>        A  B  C
+>> 0      1  2  3
+>> 1      4  5  6
+>> 2      7  8  9
+
+df = df.rename(columns={'A':'thing'}) # correct
+>>    thing  B  C
+>> 0      1  2  3
+>> 1      4  5  6
+>> 2      7  8  9
+```
+]
+---
+layout: false
+.left-column[
+  ## Joining
+]
+.right-column[
+
+We can merge DataFrames together using the .code[pd.merge] function:
+
+```
+people = pd.DataFrame([{'name':'Ken',         'age':35 ,  'gender': 'Male' },
+                      {'name':'Nathan',     'age':27 ,  'gender': 'Male'  },
+                      {'name':'Michelle',   'age':16 ,  'gender': 'Female' },
+                      {'name':'Koen',       'age':28   , 'gender': 'Male'}])
+scores = pd.DataFrame([{'name':'Ken',       'score':5.7 },
+                      {'name':'Nathan',     'score':8.2 },
+                      {'name':'Michelle',   'score':9.8 },
+                      {'name':'Koen',       'score':None}])
+
+pd.merge(people, scores, how='left')
+>>    age  gender      name  score
+>> 0   35    Male       Ken    5.7
+>> 1   27    Male    Nathan    8.2
+>> 2   16  Female  Michelle    9.8
+>> 3   28    Male      Koen    NaN
+```
+We can also be explicit with the column names:
+```
+pd.merge(people, scores, how='left', left_on='name', right_on='name')
+
+```
+
+]
+---
+layout: false
+.left-column[
+  ## Chaining Functions
+]
+.right-column[
+
+We can also chain functions in Pandas to be succinct (aka show off)
+```
+>>    age  gender            name  score
+>> 0   35    Male      Ken Tabuki    5.7
+>> 1   27    Male   Nathan Scully    8.2
+>> 2   16  Female  Michelle Huang    9.8
+>> 3   28    Male   Koen Kamphuis    NaN
+
+(people.drop('name', axis=1)
+             .join
+             (
+             people.name
+             .str
+             .split(expand=True)
+             .stack()
+             .reset_index(drop=True, level=1)
+             .rename('name')
+             ))
+
+>>    age  gender  score      name
+>> 0   35    Male    5.7       Ken
+>> 0   35    Male    5.7    Tabuki
+>> 1   27    Male    8.2    Nathan
+>> 1   27    Male    8.2    Scully
+>> 2   16  Female    9.8  Michelle
+>> 2   16  Female    9.8     Huang
+>> 3   28    Male    NaN      Koen
+>> 3   28    Male    NaN  Kamphuis
+```
+]
+---
+layout: false
+.left-column[
+  ## Quantiles
+]
+.right-column[
+
+Pandas a handy .code[quantile] function to allow us to return the quantile values for a .code[series]
+
+See: [http://pandas.pydata.org/pandas-docs/stable/io.html](http://pandas.pydata.org/pandas-docs/stable/io.html)
+```
+>>    age  gender            name  score
+>> 0   35    Male      Ken Tabuki    5.7
+>> ...# hidden
+
+people['age'].quantile()
+>> 27.5   # defaults to 50%
+
+np.arange(0,1.1,.1) # from the numpy library - very handy
+>> array([ 0. ,  0.1,  0.2,  0.3,  0.4,  0.5,  0.6,  0.7,  0.8,  0.9,  1. ])
+
+people['age'].quantile(np.arange(0,1.1,.1)) # float values for % quantiles
+>> 0.0    16.0
+>> 0.1    19.3
+>> 0.2    22.6
+>> 0.3    25.9
+>> 0.4    27.2
+>> 0.5    27.5
+>> 0.6    27.8
+>> 0.7    28.7
+>> 0.8    30.8
+>> 0.9    32.9
+>> 1.0    35.0
+```
+]
+---
+layout: false
+.left-column[
+  ## Reading and Writing Data
+]
+.right-column[
+
+Pandas has comprehensive I/O functions. The most common are to use .code[pd.read_csv] and .code[pd.read_sql] and .code[to_csv]
+
+See: [http://pandas.pydata.org/pandas-docs/stable/io.html](http://pandas.pydata.org/pandas-docs/stable/io.html)
+```
+df = pd.read_csv('my_csv.csv')
+df = pd.to_csv('new_csv.csv', index=False) # we don't want to add the
+                                           # Index row numbers to the output
+```
+
+```
+# python 3 from S3 via the boto client
+import boto3
+s3 = boto3.client('s3', ..credentials..)
+obj = s3.get_object(Bucket='bucket', Key='key')
+file = obj['Body'].read().decode('utf-8')
+df = pd.read_csv(io.StringIO(file))
+```
+
+Using .code[read_sql] requires a library called SQLAlchemy and the various drivers. Example:
+```
+import sqlalchemy as sql
+engine_string = "postgresql://%s:%s@%s:%s/%s" % (
+    user, pw, host, port, db_name)
+engine = sql.create_engine(engine_string)
+df = pd.read_sql("SELECT * FROM mytable;", engine)
+```
+]
+---
+layout: false
+.left-column[
+  ## Plotting
+]
+.right-column[
+
+Pandas has some plotting functions built in but its recommended to use .code[matplotlib] [http://matplotlib.org/](http://matplotlib.org/), or my personal prefernce .code[seaborn] [http://seaborn.pydata.org/](http://seaborn.pydata.org/)
+
+For the examples I am going to use a sample dataset from Titanic passengers
+
+```
+import seaborn as sns
+titanic = sns.load_dataset("titanic")
+>> survived  pclass     sex   age  sibsp  parch     fare embarked  class
+>> 0         0       3    male  22.0      1      0   7.2500        S  Third
+>> 1         1       1  female  38.0      1      0  71.2833        C  First
+>> 2         1       3  female  26.0      0      0   7.9250        S  Third
+>> 3         1       1  female  35.0      1      0  53.1000        S  First
+>> 4         0       3    male  35.0      0      0   8.0500        S  Third
+```
+]
+---
+layout: false
+.left-column[
+  ## Plotting (count)
+]
+.right-column[
+We can do a simple count by a series.
+```
+sns.countplot(x="class", data=titanic)
+sns.plt.show()
+```
+![](countplot.png)
+]
+---
+layout: false
+.left-column[
+  ## Plotting (distribution)
+]
+.right-column[
+We can look at the distribution of a series.
+```
+ages = titanic[titanic["age"].notnull()]['age'].values
+sns.distplot(ages)
+sns.plt.show()
+```
+![](distplot.png)
+]
+---
+layout: false
+.left-column[
+  ## Plotting (scatter)
+]
+.right-column[
+We can see the correlation between two values in a scatter plot
+```
+sns.regplot('age','fare',data=titanic, fit_reg=True)
+sns.plt.show()
+```
+![](scatterplot.png)
+]
+---
+layout: false
+.left-column[
+  ## Plotting (grids)
+]
+.right-column[
+It is often helpful to compare series by another category:
+```
+import matplotlib.pyplot as plt
+g = sns.FacetGrid(titanic, row="embark_town")
+g = g.map(plt.scatter, 'age','fare')
+sns.plt.show()
+```
+![](gridplot.png)
+]
+---
+layout: false
+.left-column[
+  ## Plotting (scatter)
+]
+.right-column[
+We can see the correlation between two values in a scatter plot
+```
+sns.regplot('age','fare',data=titanic, fit_reg=True)
+sns.plt.show()
+```
+![](scatterplot.png)
+]
+---
+layout: false
+.left-column[
+  ## Plotting (grids)
+]
+.right-column[
+It is often helpful to compare series by another category:
+```
+import matplotlib.pyplot as plt
+g = sns.FacetGrid(titanic, row="embark_town")
+g = g.map(plt.scatter, 'age','fare')
+sns.plt.show()
+```
+![](gridplot.png)
+]
+---
+class: center, middle, of
+## Lets get coding
+*And have a quick break...*
+---
+layout: false
+.left-column[
+  ## Install python3 and juypter
+]
+.right-column[
+Can you please all install python3 and use pip (python package manager) to install .[code jupyter pandas numpy seaborn]
+```
+brew install python3
+# verify
+python --version
+>> Python 3.5.1
+pip install jupyter pandas numpy seaborn
+```
+Make a new directory that we will run our notebook out of and launch jupyter
+```
+mkdir ~/Documents/Projects/herebepandas && cd  ~/Documents/Projects/herebepandas
+jupyter notebook
+```
+]
+---
+
+
+
+
+
+
 
     </textarea>
     <script src="js/remark.js" type="text/javascript">
